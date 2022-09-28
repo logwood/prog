@@ -1,0 +1,46 @@
+<!doctype html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Table set() example</title>
+</head>
+
+<button onclick="downloadEvt('validate.wasm')">
+  press here to download
+</button>
+<script>
+  function downloadEvt(url) {
+      window.open(url, '_self');
+  }
+</script>
+<script src="js/quicksort.js"></script>
+		</script>
+<body>
+  <script>
+
+    const memory = new WebAssembly.Memory({ initial: 256, maximum: 256 });
+    const importObj = {
+      env: {
+        abortStackOverflow: () => { throw new Error('overflow'); },
+        table: new WebAssembly.Table({ initial: 0, maximum: 0, element: 'anyfunc' }),
+        tableBase: 0,
+        memory: memory,
+        memoryBase: 1024,
+        STACKTOP: 0,
+        STACK_MAX: memory.buffer.byteLength,
+      }
+    };    
+    new Promise(function(resolve,reject){
+    
+    fetch('validate.wasm').then((response) => WebAssembly.instantiateStreaming(response, importObj))
+      .then((wa) => {var start = Date.now();console.log(wa.instance.exports.main.call());var end = Date.now();console.log("webassembly time is",end-start);});
+    
+
+    }).then(function(val){ 
+    })
+   
+  </script>
+</body>
+
+</html>
